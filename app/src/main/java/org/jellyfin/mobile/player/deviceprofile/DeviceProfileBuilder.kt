@@ -147,7 +147,7 @@ class DeviceProfileBuilder(
 
         return DeviceProfile(
             name = Constants.APP_INFO_NAME,
-            directPlayProfiles = directPlayProfiles,
+            directPlayProfiles = emptyList(),
             transcodingProfiles = transcodingProfiles,
             containerProfiles = containerProfiles,
             codecProfiles = codecProfiles,
@@ -192,27 +192,7 @@ class DeviceProfileBuilder(
         }
     }
 
-    fun getExternalPlayerProfile(): DeviceProfile = DeviceProfile(
-        name = EXTERNAL_PLAYER_PROFILE_NAME,
-        directPlayProfiles = listOf(
-            DirectPlayProfile(type = DlnaProfileType.VIDEO, container = ""),
-            DirectPlayProfile(type = DlnaProfileType.AUDIO, container = ""),
-        ),
-        transcodingProfiles = emptyList(),
-        containerProfiles = emptyList(),
-        codecProfiles = emptyList(),
-        subtitleProfiles = buildList {
-            EXTERNAL_PLAYER_SUBTITLES.mapTo(this) { format ->
-                SubtitleProfile(format = format, method = SubtitleDeliveryMethod.EMBED)
-            }
-            EXTERNAL_PLAYER_SUBTITLES.mapTo(this) { format ->
-                SubtitleProfile(format = format, method = SubtitleDeliveryMethod.EXTERNAL)
-            }
-        },
-        maxStreamingBitrate = Int.MAX_VALUE,
-        maxStaticBitrate = Int.MAX_VALUE,
-        musicStreamingTranscodingBitrate = Int.MAX_VALUE,
-    )
+    fun getExternalPlayerProfile(): DeviceProfile = getDeviceProfile()
 
     companion object {
         private const val EXTERNAL_PLAYER_PROFILE_NAME = Constants.APP_INFO_NAME + " External Player"
