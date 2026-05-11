@@ -77,7 +77,7 @@ class DeviceProfileBuilder(
             TranscodingProfile(
                 type = DlnaProfileType.VIDEO,
                 container = "ts",
-                videoCodec = "h264",
+                videoCodec = "hevc,h264",
                 audioCodec = "mp1,mp2,mp3,aac,ac3,eac3,dts,mlp,truehd",
                 protocol = MediaStreamProtocol.HLS,
                 conditions = emptyList(),
@@ -85,7 +85,7 @@ class DeviceProfileBuilder(
             TranscodingProfile(
                 type = DlnaProfileType.VIDEO,
                 container = "mkv",
-                videoCodec = "h264",
+                videoCodec = "hevc,h264",
                 audioCodec = AVAILABLE_AUDIO_CODECS[SUPPORTED_CONTAINER_FORMATS.indexOf("mkv")].joinToString(","),
                 protocol = MediaStreamProtocol.HLS,
                 conditions = emptyList(),
@@ -232,13 +232,13 @@ class DeviceProfileBuilder(
          */
         private val AVAILABLE_VIDEO_CODECS = arrayOf(
             // mp4
-            arrayOf("mpeg1video", "mpeg2video", "h263", "mpeg4", "h264", "hevc", "av1", "vp9"),
+            arrayOf("mpeg1video", "mpeg2video", "h263", "mpeg4", "h264", "hevc", "vp9"),
             // fmp4
-            arrayOf("mpeg1video", "mpeg2video", "h263", "mpeg4", "h264", "hevc", "av1", "vp9"),
+            arrayOf("mpeg1video", "mpeg2video", "h263", "mpeg4", "h264", "hevc", "vp9"),
             // webm
-            arrayOf("vp8", "vp9", "av1"),
+            arrayOf("vp8", "vp9"),
             // mkv
-            arrayOf("mpeg1video", "mpeg2video", "h263", "mpeg4", "h264", "hevc", "av1", "vp8", "vp9"),
+            arrayOf("mpeg1video", "mpeg2video", "h263", "mpeg4", "h264", "hevc", "vp8", "vp9"),
             // mp3
             emptyArray(),
             // ogg
