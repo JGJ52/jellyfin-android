@@ -93,6 +93,81 @@ class WebViewFragment : Fragment(), BackPressInterceptor, JellyfinWebChromeClien
             assetsPathHandler,
             mainViewModel,
         ) {
+            override fun onPageStarted(view: WebView?, url: String?, favicon: android.graphics.Bitmap?) {
+                super.onPageStarted(view, url, favicon)
+
+                val script = """
+                    (function() {
+                        function forceHevcMp4(profile) {
+                            if (profile.DirectPlayProfiles) {
+                                profile.DirectPlayProfiles.forEach(function(p) {
+                                    if (p.Type === 'Video') {
+                                        var beforeC = p.Container;
+                                        var beforeV = p.VideoCodec;
+                                        p.Container = 'mp4';
+                                        p.VideoCodec = 'hevc';
+                                    }
+                                });
+                            }
+
+                            if (profile.TranscodingProfiles) {
+                                profile.TranscodingProfiles.forEach(function(p) {
+                                    if (p.Type === 'Video') {
+                                        var beforeC = p.Container;
+                                        var beforeV = p.VideoCodec;
+                                        p.Container = 'mp4';
+                                        p.VideoCodec = 'hevc';
+                                    }
+                                });
+                            }
+
+                            if (profile.CodecProfiles) {
+                                profile.CodecProfiles = profile.CodecProfiles.filter(function(cp) {
+                                    return cp.Type !== 'Video' || !cp.Codec || cp.Codec.split(',').indexOf('hevc') !== -1;
+                                });
+                            }
+                        }
+
+                        function patchProfile(body) {
+                            try {
+                                var parsed = JSON.parse(body);
+                                var profile = parsed.DeviceProfile;
+                                if (profile) {
+                                    forceHevcMp4(profile);
+                                }
+                                return JSON.stringify(parsed);
+                            } catch (e) {
+                                return body;
+                            }
+                        }
+
+                        var origFetch = window.fetch;
+                        window.fetch = function(input, init) {
+                            var url = (typeof input === 'string') ? input : (input && input.url);
+                            if (url && url.indexOf('PlaybackInfo') !== -1 && init && init.body) {
+                                init.body = patchProfile(init.body);
+                            }
+                            return origFetch.apply(this, arguments);
+                        };
+
+                        var origSend = XMLHttpRequest.prototype.send;
+                        var origOpen = XMLHttpRequest.prototype.open;
+                        XMLHttpRequest.prototype.open = function(method, url) {
+                            this._jfUrl = url;
+                            return origOpen.apply(this, arguments);
+                        };
+                        XMLHttpRequest.prototype.send = function(body) {
+                            if (this._jfUrl && this._jfUrl.indexOf('PlaybackInfo') !== -1 && body) {
+                                body = patchProfile(body);
+                            }
+                            return origSend.call(this, body);
+                        };
+                    })();
+                """.trimIndent()
+
+                view?.evaluateJavascript(script, null)
+            }
+
             override fun onConnectedToWebapp() {
                 val webViewBinding = webViewBinding ?: return
                 val webView = webViewBinding.webView
