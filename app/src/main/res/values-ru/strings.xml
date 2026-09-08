@@ -97,7 +97,6 @@
     <string name="playback_info_stream_unknown_title">Неизвестное название</string>
     <string name="menu_item_auto">Авто</string>
     <string name="pref_exoplayer_direct_play_ass">Разрешить субтитры SSA/ASS в прямом воспроизведении</string>
-    <string name="pref_exoplayer_direct_play_ass_summary">Предотвратить перекодирование и показывать субтитры только с базовой стилизацией. При включении этой функции расширенная стилизация субтитров будет недоступна.</string>
     <string name="player_error_unspecific_exception">Произошла ошибка в плеере</string>
     <string name="menu_item_software_decoding">Программное декодирование</string>
     <string name="pref_exoplayer_start_landscape_video_in_landscape">Начинать ландшафтные видео в ландшафтной ориентации</string>
@@ -165,4 +164,5 @@
     <string name="download_location_not_set_description">Чтобы загружать медиафайлы, выберите папку для их хранения.</string>
     <string name="download_location_inaccessible">Выбранное место для загрузки недоступно</string>
     <string name="download_location_inaccessible_description">Выбранное место для загрузки больше недоступно. Выберите другую папку, чтобы продолжить загрузку.</string>
+    <string name="download_remove_keep_local">Оставить локальные файл(ы)</string>
 </resources>
